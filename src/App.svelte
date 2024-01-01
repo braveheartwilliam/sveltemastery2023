@@ -1,47 +1,111 @@
+<!-- NEED CORS EXTENSION IN BROWSER TO MAKE THIS WORK -->
+
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+	let teamRedColor = 'red';
+	let teamBlueColor = 'blue';
+	let teamWinnerReset = '';
+	let teamLoser = '';
+	let teamScoreRed = 20;
+	let teamScoreBlue = 20;
+	import Team from './Team-My-MTG.svelte';
+	function resetGame() {
+		teamScoreBlue = 20;
+		teamScoreRed = 20;
+		teamLoser = '';
+	}
 </script>
 
-<main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-</main>
+<h1>MTGCounter App</h1>
+<div class="row">
+	<Team
+		bind:teamColor={teamRedColor}
+		bind:teamLoser
+		bind:teamScore={teamScoreRed}
+	/>
+	<Team
+		bind:teamColor={teamBlueColor}
+		bind:teamLoser
+		bind:teamScore={teamScoreBlue}
+	/>
+</div>
+<div class="col">
+	{#if teamLoser === 'blue'}
+		<h2
+			class="winner"
+			style="color:red"
+		>
+			Red Won
+		</h2>
+		<h2>
+			<button
+				on:click={resetGame}
+				class="btn newGame">New Game</button
+			>
+		</h2>
+	{:else if teamLoser === 'red'}
+		<h2
+			class="winner"
+			style="color:blue"
+		>
+			Blue Won
+		</h2>
+		<div class="row">
+			<h2>
+				<button
+					on:click={resetGame}
+					class="btn newGame">New Game</button
+				>
+			</h2>
+		</div>
+	{:else}
+		<button
+			on:click={resetGame}
+			class="btn reset">Reset Game</button
+		>
+	{/if}
+</div>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
+	div.row {
+		display: flex;
+		justify-content: center;
+		margin-top: 0%;
+		margin-bottom: 0%;
+	}
+	div.col {
+		display: flex;
+		flex-direction: column;
+		flex-flow: column;
+		justify-content: center;
+	}
+	.btn {
+		width: 80vw;
+		display: flex;
+		justify-content: center;
+		margin: auto;
+		margin-top: 0.7rem;
+		font-size: 1.2rem;
+	}
+	h1 {
+		text-align: center;
+	}
+	h2 {
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+	.winner {
+		/* align-content: center;
+		justify-content: center; */
+		text-align: center;
+	}
+
+	.newGame {
+		background-color: green;
+		color: white;
+		margin-top: 0%;
+		/* transform: translateY(3rem); */
+	}
+	.reset {
+		background-color: orange;
+	}
 </style>
